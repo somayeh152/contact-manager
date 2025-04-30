@@ -1,2 +1,3 @@
 export { ContactList } from "./ContactList";
-export { AddContactForm } from "./AddContactForm";
+export { AddEditContactForm } from "./AddEditContactForm";
+export { ContactItems } from "./ContactItems";

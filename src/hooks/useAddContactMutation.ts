@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../api/contacts";
-import {Contact, NewContact} from "../types/contact.ts";
+import { Contact, NewContact } from "../types/contact.ts";
 
 const addContact = async (newContact: NewContact): Promise<Contact> => {
-    console.log("newContact",newContact);
     const response =  await axiosInstance.post("/contacts", newContact);
-    console.log("response", response);
     return response.data;
 }
 

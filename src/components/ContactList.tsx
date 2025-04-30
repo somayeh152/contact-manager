@@ -1,17 +1,22 @@
+import { FC } from "react";
+import { ContactItems } from "../components";
 import { useContactsListQuery } from "../hooks";
+import { Contact} from "../types/contact.ts";
 
-export const ContactList = () => {
-    const {data, isLoading, error} = useContactsListQuery();
+type ContactListProps = {
+    onEdit: (contact: Contact) => void;
+}
 
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error loading contacts</p>;
+export const ContactList: FC<ContactListProps> = ({onEdit}) => {
+    const contactsListQuery = useContactsListQuery();
+
+    if (contactsListQuery?.isLoading) return <p>Loading...</p>;
+    if (contactsListQuery?.error) return <p>Error loading contacts</p>;
 
     return (
         <ul>
-            {data?.map((item) => (
-                <li key={item.id}>
-                    <strong>{item.name}</strong> - {item.phone}
-                </li>
+            {contactsListQuery?.data?.map((item) => (
+                <ContactItems contactData={item} onEdit={onEdit} />
             ))}
         </ul>
     )

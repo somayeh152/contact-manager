@@ -1,11 +1,15 @@
-import {ContactList, AddContactForm} from './components';
+import { useState } from "react";
+import { ContactList, AddEditContactForm } from './components';
+import { Contact } from "./types/contact.ts";
 
 function App() {
-  return (
+    const [initialContact, setInitialContact] = useState<Contact | null>(null);
+
+    return (
       <>
           <h1>Contacts List:</h1>
-          <AddContactForm/>
-          <ContactList/>
+          <AddEditContactForm initialContact={initialContact} onCancelEdit={() => setInitialContact(null)} />
+          <ContactList onEdit={(contact: Contact) => setInitialContact(contact)}/>
       </>
   )
 }
