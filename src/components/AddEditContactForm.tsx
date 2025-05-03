@@ -1,6 +1,7 @@
     import { FC, useState, useEffect } from "react";
     import { useAddContactMutation, useEditContactMutation } from "../hooks";
     import { Contact } from "../types/contact.ts";
+    import { TextField, Button, Stack, Typography, Alert, FormGroup } from "@mui/material";
 
     type AddEditContactFormProps = {
         initialContact: Contact | null,
@@ -36,49 +37,51 @@
         };
 
         return (
-            <form onSubmit={handleSubmit} className="space-y-3 mb-6">
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full border px-3 py-2 rounded"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full border px-3 py-2 rounded"
-                    required
-                />
-                <button
-                    type="submit"
-                    disabled={addContactMutation?.isPending || editContactMutation.isPending}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                >
-                    {
-                        initialContact?.id ?
-                            editContactMutation?.isPending ? "Editing..." : "Edit Contact" :
-                            addContactMutation?.isPending ? "Adding..." : "Add Contact"
-                    }
-                </button>
-                {
-                    initialContact?.id &&
-                    <button
-                        type="reset"
-                        onClick={() => {
+            <FormGroup onSubmit={handleSubmit}>
+                <Stack spacing={2} mb={4}>
+                    <Typography variant="h6">
+                        {initialContact?.id ? "Edit Contact" : "Add New Contact"}
+                    </Typography>
+                    <TextField
+                        label="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        fullWidth
+                        required
+                        size="small"
+                    />
+                    <TextField
+                        label="Phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        fullWidth
+                        required
+                        size="small"
+                    />
+                    <Stack direction="row" spacing={2}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            disabled={addContactMutation.isPending || editContactMutation.isPending}
+                        >
+                            {initialContact?.id
+                                ? editContactMutation.isPending ? "Editing..." : "Edit Contact"
+                                : addContactMutation.isPending ? "Adding..." : "Add Contact"}
+                        </Button>
+                        {initialContact?.id && (
+                            <Button variant="outlined" color="info" onClick={() => {
                                 setName("");
                                 setPhone("");
                                 onCancelEdit();
-                        }}
-                    >
-                        Cancel Edit
-                    </button>
-                }
-                {addContactMutation?.error && <p className="text-red-500">Error adding contact</p>}
-                {editContactMutation.error && <p className="text-red-500">Error editing contact</p>}
-            </form>
+                            }}>
+                                Cancel
+                            </Button>
+                        )}
+                    </Stack>
+                    {addContactMutation.error && <Alert severity="error">Error adding contact</Alert>}
+                    {editContactMutation.error && <Alert severity="error">Error editing contact</Alert>}
+                </Stack>
+            </FormGroup>
         );
     };
